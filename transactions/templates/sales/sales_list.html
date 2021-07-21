@@ -9,9 +9,9 @@
 {% block content %}
     
     <div class="row" style="color: #ea2088; font-style: bold; font-size: 3rem;">
-        <div class="col-md-8">Sales List</div>
+        <div class="col-md-8">Liste vente</div>
         <div class="col-md-4">               
-            <div style="float:right;"> <a class="btn ghost-blue" href="{% url 'new-sale' %}">New Outgoing Stock</a> </div>
+            <div style="float:right;"> <a class="btn ghost-blue" href="{% url 'new-sale' %}">Nouvelle vente</a> </div>
         </div>
     </div>
     
@@ -21,12 +21,12 @@
             
         <thead class="thead-inverse align-middle">
             <tr>
-                <th width="10%">Bill No</th>
-                <th width="15%">Customer</th>
-                <th width="15%">Stocks Sold</th>
-                <th width="10%">Quantity Sold</th>
-                <th width="10%">Total Sold Price</th>
-                <th width="15%">Sale Date</th>
+                <th width="10%">Facture no</th>
+                <th width="15%">Client</th>
+                <th width="15%">produits vendus</th>
+                <th width="10%">Quantité vendus</th>
+                <th width="10%">Total vente</th>
+                <th width="15%">date vente</th>
                 <th width="25%">Options</th>
             </tr>
         </thead>
@@ -37,12 +37,12 @@
             {% for sale in bills %}
             <tr>
                 <td class="align-middle"> <h3>{{ sale.billno }}</h3> </td>
-                <td class=""> {{ sale.name }} <br> <small style="color: #909494">Ph No : {{ sale.address }}</small> </td>
+                <td class=""> {{ sale.name }} <br> <small style="color: #909494">adr : {{ sale.address }}</small> </td>
                 <td class="align-middle">{% for item in sale.get_items_list %} {{ item.stock.name }} <br> {% endfor %}</td>
                 <td class="align-middle">{% for item in sale.get_items_list %} {{ item.quantity }} <br> {% endfor %}</td>     
                 <td class="align-middle">{{ sale.get_total_price }}</td>
                 <td class="align-middle">{{ sale.time.date }}</td>
-                <td class="align-middle"> <a href="{% url 'sale-bill' sale.billno %}" class="btn ghost-pink">View Bill</a> <a href="{% url 'delete-sale' sale.pk %}" class="btn ghost-red">Delete Bill</a> </td>
+                <td class="align-middle"> <a href="{% url 'sale-bill' sale.billno %}" class="btn ghost-pink">Facture</a> <a href="{% url 'delete-sale' sale.pk %}" class="btn ghost-red">Supprimer</a> </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -53,8 +53,8 @@
         {% if is_paginated %}
 
             {% if page_obj.has_previous %}
-                <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                <a class="btn btn-outline-info mb-4" href="?page=1">Debut</a>
+                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Précedent</a>
             {% endif %}
 
             {% for num in page_obj.paginator.page_range %}
@@ -66,8 +66,8 @@
             {% endfor %}
 
             {% if page_obj.has_next %}
-                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
-                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Suivant</a>
+                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Dernier</a>
             {% endif %}
 
         {% endif %}
@@ -79,7 +79,7 @@
     </table>
 
     <br><br><br><br><br><br><br><br>
-    <div style="color: #ea2088; font-style: bold; font-size: 1.5rem; text-align: center;">WOW, SUCH EMPTY</div>
+    <div style="color: #ea2088; font-style: bold; font-size: 1.5rem; text-align: center;">Liste vide</div>
 
 {% endif %}
 
