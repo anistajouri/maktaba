@@ -28,44 +28,44 @@
         <nav id="sidebar">
             
             <div class="sidebar-header">
-                <a class="navbar-brand titlefont mr-4" href="{% url 'home' %}"><h3>Invi</h3></a>
+                <a class="navbar-brand titlefont mr-4" href="{% url 'home' %}"><h3>Maktaba</h3></a>
             </div>
 
             <ul class="list-unstyled sidebar-components">
                 {# <p class="sidebar-paragraph">Dummy Heading</p> #}
                 <li>
-                    <a class="sidebar-text sidebar-button" href="{% url 'home' %}">Home</a>
+                    <a class="sidebar-text sidebar-button" href="{% url 'home' %}">Menu</a>
                 </li>               
                 <li>
-                    <a href="#inventorySubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Inventory</a>
+                    <a href="#inventorySubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Inventaire</a>
                     <ul class="collapse list-unstyled" id="inventorySubmenu">
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'inventory' %}">Inventory List</a> </li>
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-stock' %}">Add New Stock</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'inventory' %}">Liste produits en stock</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-stock' %}">Ajouter produit</a> </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="#purchaseSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Purchases</a>
+                    <a href="#purchaseSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Achats</a>
                     <ul class="collapse list-unstyled" id="purchaseSubmenu">
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'purchases-list' %}">Purchases List</a> </li>
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'select-supplier' %}">New Incoming Stock</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'purchases-list' %}">Liste achats</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'select-supplier' %}">Nouvel achat</a> </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="#saleSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Sales</a>
+                    <a href="#saleSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Ventes</a>
                     <ul class="collapse list-unstyled" id="saleSubmenu">
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'sales-list' %}">Sales Orders</a> </li>
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-sale' %}">New Outgoing Stock</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'sales-list' %}">Liste ventes</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-sale' %}">Nouvelle vente</a> </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="#supplierSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Suppliers</a>
+                    <a href="#supplierSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Fournisseurs</a>
                     <ul class="collapse list-unstyled" id="supplierSubmenu">
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'suppliers-list' %}">Suppliers List</a> </li>
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-supplier' %}">Add New Supplier</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'suppliers-list' %}">Liste fournisseur</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-supplier' %}">Nouveau fournisseur</a> </li>
                     </ul>
                 </li>
                 <li>
-                    <a class="sidebar-text sidebar-button" href="{% url 'about' %}">About</a>
+                    <a class="sidebar-text sidebar-button" href="{% url 'about' %}">A propos</a>
                 </li>
 
                 <li class="bottomleft">

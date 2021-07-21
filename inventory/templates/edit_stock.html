@@ -15,15 +15,54 @@
         {% csrf_token %}
         {{ form.non_field_errors }}
         
-        <div class="form-group">
+        <div class="form-group" >
             {{ form.name.errors }}
-            <label for="{{ form.name.id_for_label }}">Name:</label>
+            <label for="{{ form.name.id_for_label }}">CodeBar:</label>
             {{ form.name }}
+
+            <script type="text/javascript">
+            
+                $('body').on('keydown', 'input, select', function(e) {
+                    if (e.key === "Enter") {
+                        var self = $(this), form = self.parents('form:eq(0)'), focusable, next;
+                        focusable = form.find('input,a,select,button,textarea').filter(':visible');
+                        next = focusable.eq(focusable.index(this)+1);
+                        if (next.length) {
+                            next.focus();
+                        } else {
+                            form.submit();
+                        }
+                        return false;
+                    }
+                });
+
+            </script>
+
         </div>
         <div class="form-group ">
+            {{ form.product.errors }}
+            <label for="{{ form.quantity.id_for_label }}">Produit:</label>
+            {{ form.product }}
+        </div>        
+        <div class="form-group ">
             {{ form.quantity.errors }}
-            <label for="{{ form.quantity.id_for_label }}">Quantity:</label>
+            <label for="{{ form.quantity.id_for_label }}">Quantité:</label>
             {{ form.quantity }}
+        </div>        
+        <div class="form-group ">
+            {{ form.price_achat.errors }}
+            <label for="{{ form.quantity.id_for_label }}">Prix achat:</label>
+            {{ form.price_achat }}
+        </div>
+        <div class="form-group ">
+            {{ form.price_vente.errors }}
+            <label for="{{ form.quantity.id_for_label }}">Prix vente:</label>
+            {{ form.price_vente }}
+        </div>
+        <div class="form-group ">
+            {{ form.remise.errors }}
+            <label for="{{ form.quantity.id_for_label }}">Remise:</label>
+            {{ form.remise }}
         </div>
 
         <br>

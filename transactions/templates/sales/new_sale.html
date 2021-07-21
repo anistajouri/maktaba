@@ -7,7 +7,7 @@
 
 {% block content %}
 
-    <div style="color:#ea2088; font-style: bold; font-size: 3rem; border-bottom: 1px solid white;">New Sale</div>
+    <div style="color:#ea2088; font-style: bold; font-size: 3rem; border-bottom: 1px solid white;">Nouvelle vente</div>
     
     <br>
 
@@ -16,41 +16,28 @@
         {% csrf_token %}
         {{ form.non_field_errors }}
 
-        <div class="panel-heading panel-heading-text">Customer Details</div>
+        <div class="panel-heading panel-heading-text">Détails Client</div>
         <div class="panel-body">
             
             {{ form.name.errors }}
-            {{ form.phone.errors }}
-            {{ form.email.errors }}
             {{ form.address.errors }}
-            {{ form.gstin.errors }}
 
             <div class="form-group">
-                <label for="{{ form.name.id_for_label }}" class="panel-body-text">Customer Name:</label>
-                {{ form.name }}                
-            </div>
-
-            <div class="form-row">
-                <div class="form-group col-md-6"> 
-                    <label for="{{ form.phone.id_for_label }}" class="panel-body-text">Phone No:</label>
-                    {{ form.phone }}
-                </div>
-                <div class="form-group col-md-6">              
-                    <label for="{{ form.email.id_for_label }}" class="panel-body-text">Email:</label>
-                    {{ form.email }}
-                </div>
+                <label for="{{ form.name.id_for_label }}" class="panel-body-text" >Nom Client:</label>
+                {{ form.name }}
             </div>
 
             <div class="form-group">
-                <label for="{{ form.address.id_for_label }}" class="panel-body-text">Address:</label>
+                <label for="{{ form.address.id_for_label }}" class="panel-body-text">Contact:</label>
                 {{ form.address }}
             </div>
-            <div class="form-group">
-                <label for="{{ form.gstin.id_for_label }}" class="panel-body-text">GSTIN No:</label>
-                {{ form.gstin }}
-            </div>
-
         </div>
+
+        <br>
+
+        <div class="panel-heading panel-heading-text">CodeBar</div>        
+        <br>
+        <input type="text" class="textinput form-control typecodebar" id="myTextInput" >
 
         <br>
 
@@ -58,39 +45,54 @@
             
             {{ formset.management_form }}
 
-            <div class="panel-heading panel-heading-text">Product Details</div>
+            <div class="panel-heading panel-heading-text">Liste vente</div>
             
                 <div id="stockitem"> 
                     <div class="panel-body">
                     {% for iform in formset %}
                         <div class="row form-row">
-                            <div class="form-group col-md-6">
+
+                            <div class="form-group col-md-2">
                                 {{ iform.stock.errors }}
-                                <label class="panel-body-text">Stock:</label>
+                                <label class="panel-body-text">CodeBar:</label>
                                 {{ iform.stock }}
                             </div>
-                            <div class="form-group col-md-2">
-                                <label class="panel-body-text">Price per item:</label>
-                                {{ iform.perprice }}
-                            </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-3">
+                                <label class="panel-body-text">Product:</label>
+                                <input type="text" class="textinput form-control product" value="vide" disabled required>
+                            </div>                            
+                       
+                            <div class="form-group col-md-1">
                                 {{ iform.quantity.errors }}
-                                <label class="panel-body-text">Quantity:</label>
+                                <label class="panel-body-text">Quantité:</label>
                                 {{ iform.quantity }}
                             </div>
-                            <div class="form-group col-md-1">
-                                <label class="panel-body-text">Price:</label>
-                                <input type="text" class="textinput form-control totalprice" value="1" disabled required>
+
+                            <div class="form-group col-md-2">
+                                {{ iform.perprice.errors }}
+                                <label class="panel-body-text">Prix unité:</label>
+                                {{ iform.perprice }}
                             </div>
+
+
+                            <div class="form-group col-md-1">
+                                <label class="panel-body-text">Prix:</label>
+                                <input type="text" class="textinput form-control totalprice" value="0" disabled required>
+                            </div>                            
                             <div class="form-group col-md-1">
                                 <label class="panel-body-text" style="color: #000">.</label>
                                 <button class="form-control btn btn-danger remove-form-row">-</button>
                             </div>
                         </div>
                     {% endfor %}
-                        <div style="text-align: right;">                    
-                            <a href="#" class="add-form-row">+ Add More</a>
+                        <!--<div style="text-align: right;">                    
+                            <a href="#" class="add-form-row">+ Ajouter</a>
+                        </div>-->
+
+                        <div style="text-align: right; color:#ea2088 ;font-style: bold; font-size: 2rem;  ">                    
+                            <a id="total_val">Total = 0.0</a>
                         </div>
+
                     </div>
                 </div>
 
@@ -98,8 +100,8 @@
             <br>
 
             <div class="align-middle">
-                <button type="submit" class="btn ghost-green">Add to Sales</button>
-                <a href="{% url 'sales-list' %}" class="btn ghost-button">Cancel</a>
+                <button type="submit" class="btn ghost-green">Ajouter aux ventes</button>
+                <a href="{% url 'sales-list' %}" class="btn ghost-button">Annuler</a>
             </div>
             
         </div>
@@ -119,14 +121,73 @@
             var replacement = prefix + '-' + ndx;
             if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
             if (el.id) el.id = el.id.replace(id_regex, replacement);
-            if (el.name) el.name = el.name.replace(id_regex, replacement);
+            if (el.name) el.name = el.name.replace(id_regex, replacement);            
+            console.log("element:"+el.name);
         }
         
         //stores the total no of item forms
         var total = 1;
 
+        var firstItem = 1;
+
+        //stores pk and quantity of all stocks into a js object 'stocks'
+        var stocks = [
+            {% for stock in stocks %}
+                {% if not forloop.first %},{% endif %}
+                {
+                    pk          : {{ stock.pk }},
+                    name        : "{{ stock.name }}",
+                    quantity    : {{ stock.quantity }},
+                    price_vente : {{ stock.price_vente }},
+                    product     : "{{ stock.product }}"
+                }
+            {% endfor %}
+        ];        
+
+        //  cloneMore();
+        // rererz
         function cloneMore(selector, prefix) {
             var newElement = $(selector).clone(true);
+            var ret_codebar = undefined;
+            var idx = -1;            
+            //var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+            newElement.find(':input:not([type=button]):not([type=submit]):not([type=reset])').each(function() {
+                var name = $(this).attr('name')
+                console.log("+++++++"+name)
+                if(name) {
+                    name = name.replace('-' + (total-1) + '-', '-' + total + '-');
+                    var id = 'id_' + name;                    
+                    $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+                }
+            });
+            newElement.find('label').each(function() {
+                var forValue = $(this).attr('for');
+                
+                if (forValue) {
+                forValue = forValue.replace('-' + (total-1) + '-', '-' + total + '-');
+                $(this).attr({'for': forValue});
+                }
+            });
+            newElement.find('.quantity').val(1);
+//            newElement.find('.stock').val(idx);
+
+            newElement.find('.stock').val(0);
+            newElement.find('.price').val(0);
+            newElement.find('.totalprice').val(0);
+            newElement.find('.product').val("");
+
+
+            total++;
+            $('#id_' + prefix + '-TOTAL_FORMS').val(total);
+            $(selector).after(newElement);
+            return false;
+        }
+
+
+        function AddItem(selector, prefix, addedItem) {
+            var newElement = $(selector).clone(true);
+            var ret_codebar = undefined;
+            var idx = -1;            
             //var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
             newElement.find(':input:not([type=button]):not([type=submit]):not([type=reset])').each(function() {
                 var name = $(this).attr('name')
@@ -134,35 +195,141 @@
                     name = name.replace('-' + (total-1) + '-', '-' + total + '-');
                     var id = 'id_' + name;
                     $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+                    if (name.includes("stock")) {
+
+                        stocks.forEach(function(stockSummary, i) {
+                            var codebar = stocks[i].name;
+                            if(codebar == addedItem) {                    
+                                //custom_alert.render('Bonjour8;'+name);
+                                //checks if ordered stock is more than available stock
+                                idx = i;                               
+                            }                            
+                        });
+                    }
                 }
             });
             newElement.find('label').each(function() {
                 var forValue = $(this).attr('for');
+                
                 if (forValue) {
-                forValue = forValue.replace('-' + (total-1) + '-', '-' + total + '-');
-                $(this).attr({'for': forValue});
+                  forValue = forValue.replace('-' + (total-1) + '-', '-' + total + '-');
+                  $(this).attr({'for': forValue});
                 }
             });
-            total++;
-            $('#id_' + prefix + '-TOTAL_FORMS').val(total);
-            $(selector).after(newElement);
+            
+            console.log("add idx--------+"+idx);
+            if (idx!=-1) {
+                total++;
+                $('#id_' + prefix + '-TOTAL_FORMS').val(total);
+                $(selector).after(newElement);
+
+                newElement.find('.stock').each(function() {
+                    var sel = document.getElementById($(this).attr('id'));
+                    for (var j = 0; j < sel.length; j++)  {
+                        if (sel.options[j].text == addedItem) {
+                            sel.options[j].selected = true;
+                        }
+                    }
+                });
+
+                newElement.find('.quantity').val(1);
+                newElement.find('.price').val(stocks[idx].price_vente);
+                newElement.find('.totalprice').val(stocks[idx].price_vente);
+                newElement.find('.product').val(stocks[idx].product.toString());
+                document.getElementById('total_val').value += stocks[idx].price_vente;
+                document.getElementById('total_val').textContent = "Total = " + document.getElementById('total_val').value.toString();
+
+
+            }
             return false;
-        }
+        }        
         
+
+
+        function updateItem(selector, prefix, addedItem) {
+            console.log("---0100----------"+$('.form-row').length);
+            var newElement = $(selector);
+            var ret_codebar = undefined;
+            var idx = -1;            
+            //var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+            newElement.find(':input:not([type=button]):not([type=submit]):not([type=reset])').each(function() {
+                var name = $(this).attr('name')
+                if(name) {
+//                    name = name.replace('-' + (total-1) + '-', '-' + total + '-');
+                    var id = 'id_' + name;                    
+                    $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+                    console.log("ANIS3--------+"+name);
+                    if (name.includes("stock")) {
+
+                        stocks.forEach(function(stockSummary, i) {
+                            var codebar = stocks[i].name;
+                            if(codebar == addedItem) {
+                                idx = i;
+                            }
+                        });
+                    }
+                }
+            });
+            newElement.find('label').each(function() {
+                var forValue = $(this).attr('for');
+                
+                if (forValue) {
+  //                forValue = forValue.replace('-' + (total-1) + '-', '-' + total + '-');
+                  $(this).attr({'for': forValue});
+                }
+            });
+
+            console.log("update idx--------+"+idx);
+            if (idx!=-1) {
+                newElement.find('.quantity').val(1);
+                newElement.find('.stock').each(function() {
+                    var sel = document.getElementById($(this).attr('id'));
+                    //element.parents('.form-row').find('.stock')
+                    console.log("-----000000000---->"+$(this).attr('id'));                    
+                    for (var j = 0; j < sel.length; j++)  {
+                        if (sel.options[j].text == addedItem) {
+                            sel.options[j].selected = true;
+                        }
+                    }
+                });
+                newElement.find('.price').val(stocks[idx].price_vente);
+                newElement.find('.totalprice').val(stocks[idx].price_vente);
+                newElement.find('.product').val(stocks[idx].product.toString());
+                document.getElementById('total_val').value = stocks[idx].price_vente;
+                document.getElementById('total_val').textContent = "Total = " + document.getElementById('total_val').value.toString();
+                firstItem=2;
+            }
+
+     //       total++;
+    //        $('#id_' + prefix + '-TOTAL_FORMS').val(total);
+
+            return false;
+        }  
+
         function deleteForm(prefix, btn) {
             //var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+            var total_vals = 0;
             if (total > 1){
+                removed_val = btn.closest('.form-row').find('.totalprice').val()
+                document.getElementById('total_val').value -= removed_val;
+                document.getElementById('total_val').textContent = "Total = "+document.getElementById('total_val').value.toString();           
+
+               
                 btn.closest('.form-row').remove();
-                var forms = $('.form-row');
+                forms = $('.form-row');
+
                 $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
                 for (var i=0, formCount=forms.length; i<formCount; i++) {
                     $(forms.get(i)).find(':input').each(function() {
-                        updateElementIndex(this, prefix, i);
+                        updateElementIndex(this, prefix, i);                        
                     });
+                    
                 }
+                
                 total--;
             } else {
                 custom_alert.render('Field cannot be deleted');
+                firstItem = 1;
             }
             return false;
         }
@@ -179,17 +346,51 @@
             return false;
         });
 
+        $('body').on('keydown', 'input, select', function(e) {
+            if (e.key === "Enter") {
+                var self = $(this), form = self.parents('form:eq(0)'), focusable, next;
+                focusable = form.find('input,a,select,button,textarea').filter(':visible');
+                next = focusable.eq(focusable.index(this)+1);
+                if (next.length) {
+                    //next.focus();
 
-        //stores pk and quantity of all stocks into a js object 'stocks'
-        var stocks = [
-            {% for stock in stocks %}
-                {% if not forloop.first %},{% endif %}
-                {
-                    pk          : {{ stock.pk }},
-                    quantity    : {{ stock.quantity }}
+                    $("#id_userName").focus();
+                } else {
+                    form.submit();
                 }
-            {% endfor %}
-        ];
+
+                return false;
+            }
+        });
+
+
+        var input_codebar = document.getElementById('myTextInput');
+        // Execute a function when the user releases a key on the keyboard
+        input_codebar.addEventListener("keyup", function(event) {
+          // Number 13 is the "Enter" key on the keyboard
+          if (event.keyCode === 13) {
+            // Cancel the default action, if needed
+            event.preventDefault();
+            // Trigger the button element with a click
+            // document.getElementById("myBtn").click();
+            if (firstItem==1) {
+               updateItem('.form-row:last', 'form', input_codebar.value);
+               
+            } else {
+               AddItem('.form-row:last', 'form', input_codebar.value); 
+            }
+            input_codebar.value = "";
+          }
+        });
+        function changeField(){
+                
+    //            input.value = "CANCELED";
+  //              input.focus();
+    //            input.select();
+
+        }
+
+
         
         //updates the total price by multiplying 'price per item' and 'quantity' 
         $(document).on('change', '.setprice', function(e){
@@ -198,32 +399,50 @@
             var element = $(this);
             var stock = element.parents('.form-row').find('.stock').val();
             var quantity = element.parents('.form-row').find('.quantity').val();
+            if (!quantity)
+                element.parents('.form-row').find('.quantity').val(1);    
             var perprice = element.parents('.form-row').find('.price').val();
             //checks if stocks are available
             stocks.forEach(function(stockSummary, i) {
                 var pk = stocks[i].pk;
                 var squantity = stocks[i].quantity;
-                if(stock == pk) {
+                var price_vente = stocks[i].price_vente;
+                var product = stocks[i].product;
+                var name = stocks[i].name;
+                if(stock == pk) {                    
+                    //custom_alert.render('Bonjour8;'+name);
                     //checks if ordered stock is more than available stock
                     if(quantity > squantity){
-                        quantity = quantity - 1;
-                        if(quantity <= 1){
+                        custom_alert.render('Dépassement du stock actuel disponible');
+/*                          quantity = quantity - 1;
+                      if(quantity <= 1){
                             //no stocks are available. Attempts to delete field
-                            custom_alert.render('Stocks are currently unavailable. Field will be removed;');
+                            custom_alert.render('Les stocks sont actuellement indisponibles. Le champ sera supprimé;');
                             //Sets quantity to 0 as failsafe for when the total no of item forms are 1
                             element.parents('.form-row').find('.quantity').val(0);
                             deleteForm('form', element);
                         } else {
                             element.parents('.form-row').find('.quantity').val(squantity-1);
                             quantity = squantity - 1;
-                            custom_alert.render('Exceeded current stock available');
-                        }
-                    }
+                            custom_alert.render('Dépassement du stock actuel disponible');
+                        }*/
+                    }                    
+                  //  element.parents('.form-row').find('.perprice').val(stocks[i].price_vente.toString());
+                    element.parents('.form-row').find('.product').val(stocks[i].product.toString());
+                    element.parents('.form-row').find('.price').val(stocks[i].price_vente);
+                    perprice = element.parents('.form-row').find('.price').val();
                 }
+                
             });     
+
             //calculates the total
             var tprice = quantity * perprice;
             //sets it to field
+            console.log("---------->"+element.parents('.form-row').find('.totalprice').val());
+            console.log("---------->"+element.parents('.form-row').find('.price').val());
+            
+            document.getElementById('total_val').value += tprice - element.parents('.form-row').find('.totalprice').val();
+            document.getElementById('total_val').textContent = "Total = "+document.getElementById('total_val').value.toString();            
             element.parents('.form-row').find('.totalprice').val(tprice);
             return false;
         });

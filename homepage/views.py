@@ -11,7 +11,7 @@ class HomeView(View):
         data = []        
         stockqueryset = Stock.objects.filter(is_deleted=False).order_by('-quantity')
         for item in stockqueryset:
-            labels.append(item.name)
+            labels.append(item.product)
             data.append(item.quantity)
         sales = SaleBill.objects.order_by('-time')[:3]
         purchases = PurchaseBill.objects.order_by('-time')[:3]

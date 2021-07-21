@@ -28,8 +28,8 @@ class StockCreateView(SuccessMessageMixin, CreateView):                         
 
     def get_context_data(self, **kwargs):                                               # used to send additional context
         context = super().get_context_data(**kwargs)
-        context["title"] = 'New Stock'
-        context["savebtn"] = 'Add to Inventory'
+        context["title"] = 'Nouveau produit'
+        context["savebtn"] = 'Ajouter à l inventaire'
         return context       
 
 

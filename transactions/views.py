@@ -230,14 +230,19 @@ class SaleCreateView(View):
     def post(self, request):
         form = SaleForm(request.POST)
         formset = SaleItemFormset(request.POST)                                 # recieves a post method for the formset
+        print("0000000000000000000", formset.errors)
+
         if form.is_valid() and formset.is_valid():
+            print("11111111111111")
             # saves bill
             billobj = form.save(commit=False)
             billobj.save()     
             # create bill details object
             billdetailsobj = SaleBillDetails(billno=billobj)
             billdetailsobj.save()
+            i =0
             for form in formset:                                                # for loop to save each individual form as its own object
+                print("222222222222222222222222",i)
                 # false saves the item and links bill to the item
                 billitem = form.save(commit=False)
                 billitem.billno = billobj                                       # links the bill object to the items
