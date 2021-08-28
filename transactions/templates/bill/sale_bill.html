@@ -30,9 +30,10 @@
                         <tr style="text-align: center;">
                             <td >
                                 <span style="font-size: 350%;">Facture</span> <br>
-                                <span style="font-size: 120%; font-weight: bold; text-decoration: underline;">Maktaba</span> <br>
-                                <span style="text-decoration: underline; font-weight: bold;">Addresse:</span> 14 Rue de sousse<br>RafRaf 8080<br>
-                                <span style="text-decoration: underline; font-weight: bold;">email : maktaba@gmail.com</span> <br><br>
+                                <span style="font-size: 120%; font-weight: bold; text-decoration: underline;">Librairie Mayar</span> <br>
+                                <span style="text-decoration: underline; font-weight: bold;">Addresse:</span>Rue Marrakech<br>RafRaf 7015<br>
+                                <span style="text-decoration: underline; font-weight: bold;">email : librairie.mayar@gmail.com</span> <br><br>
+                                <span style="text-decoration: underline; font-weight: bold;">tel : 72 445 901</span> <br><br>
                             </td>
                         </tr>
                     
@@ -82,19 +83,21 @@
                                 <tbody>
                                     <tr>
                                         <td class="inner-box" style="width: 60%;">&nbsp;<b>client : </b>{{ bill.name }}</td>                                    
+<!--
+                                        <td class="inner-box" style="width: 40%; font-weight: bold;">&nbsp;Total Hors Tax</td>
+                                        <td class="inner-box align-middle" style="width: 30%;">&nbsp; <input type="text" name="cgst" class="align-middle" pattern="[0-9]+\.[0-9]+" style="border: 0; overflow: hidden;" value="{% if billdetails.cgst %}{{ billdetails.cgst }}{% endif %}"></td> -->
+                                       <!-- <td class="inner-box align-middle" style="font-weight: bold;">&nbsp;Nombre articles</td>
+                                        <td class="inner-box" style="font-weight: bold">&nbsp; <input type="text" name="tcs" class="align-middle" pattern="[0-9]+\.[0-9]+" style="border: 0; overflow: hidden;" value="{% if billdetails.tcs %}{{ billdetails.tcs }}{% endif %}"></td>-->
 
-                                        <td class="inner-box" style="width: 40%; font-weight: bold;">&nbsp;Nombre articles</td>
-                                        <td class="inner-box align-middle" style="width: 30%;">&nbsp; <input type="text" name="cgst" class="align-middle" pattern="[0-9]+\.[0-9]+" style="border: 0; overflow: hidden;" value="{% if billdetails.cgst %}{{ billdetails.cgst }}{% endif %}"></td>
+                                        <td class="inner-box align-middle" style="font-weight: bold;">&nbsp;Total TTC</td>
+                                        <td class="inner-box align-middle">&nbsp; <input type="text" name="total" class="align-middle" pattern="[0-9]+\.[0-9]+" style="border: 0; overflow: hidden;" value="{% if billdetails.total %}{{ billdetails.total }}{% endif %}"> </td>
+
+
                                     </tr>
                                     <tr>
-                                        <td class="inner-box" style="width: 70%;" rowspan="3">{{ bill.address|linebreaks }}</td>
-                                        <td class="inner-box" style="font-weight: bold;">&nbsp;Remise</td>
-                                        <td class="inner-box align-middle">&nbsp; <input type="text" name="tcs" class="align-middle" pattern="[0-9]+\.[0-9]+" style="border: 0; overflow: hidden;" value="{% if billdetails.tcs %}{{ billdetails.tcs }}{% endif %}"></td>
+                                        <td class="inner-box"  rowspan="3">{{ bill.address|linebreaks }}</td>
                                     </tr>
-                                    <tr>                                        
-                                        <td class="inner-box" style="font-weight: bold;">&nbsp;Total à payer</td>
-                                        <td class="inner-box align-middle">&nbsp; <input type="text" name="total" class="align-middle" pattern="[0-9]+\.[0-9]+" style="border: 0; overflow: hidden;" value="{% if billdetails.total %}{{ billdetails.total }}{% endif %}"> </td>
-                                    </tr>
+
                                 </tbody>
                             </table>
                             </td>
@@ -102,7 +105,7 @@
 
                         <tr>
                             <td style="text-align: right;">
-                                <span style="font-weight: bold;"><br><br><br><br><br><br>Signature<br><br></span>
+                                <span style="font-weight: bold;"><br><br><br><br><br><br>********<br><br></span>
                             </td>
                         </tr>
 

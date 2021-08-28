@@ -70,7 +70,7 @@ class SaleBill(models.Model):
     time = models.DateTimeField(auto_now=True)
 
     name = models.CharField(default="PASSAGER",max_length=150)
-    address = models.CharField(max_length=200)
+    address = models.CharField(default="N/A",max_length=200)
 
     def __str__(self):
 	    return "Bill no: " + str(self.billno)

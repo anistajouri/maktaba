@@ -168,6 +168,7 @@ class PurchaseCreateView(View):
                 stock = get_object_or_404(Stock, name=billitem.stock.name)       # gets the item
                 # calculates the total price
                 billitem.totalprice = billitem.perprice * billitem.quantity
+
                 # updates quantity in stock db
                 stock.quantity += billitem.quantity                              # updates quantity
                 # saves bill item and stock
@@ -230,19 +231,17 @@ class SaleCreateView(View):
     def post(self, request):
         form = SaleForm(request.POST)
         formset = SaleItemFormset(request.POST)                                 # recieves a post method for the formset
-        print("0000000000000000000", formset.errors)
 
         if form.is_valid() and formset.is_valid():
-            print("11111111111111")
             # saves bill
             billobj = form.save(commit=False)
             billobj.save()     
             # create bill details object
             billdetailsobj = SaleBillDetails(billno=billobj)
-            billdetailsobj.save()
-            i =0
+            billdetailsobj.tcs = 0
+            billdetailsobj.total = 0
+            i = 0
             for form in formset:                                                # for loop to save each individual form as its own object
-                print("222222222222222222222222",i)
                 # false saves the item and links bill to the item
                 billitem = form.save(commit=False)
                 billitem.billno = billobj                                       # links the bill object to the items
@@ -250,11 +249,14 @@ class SaleCreateView(View):
                 stock = get_object_or_404(Stock, name=billitem.stock.name)      
                 # calculates the total price
                 billitem.totalprice = billitem.perprice * billitem.quantity
+                billdetailsobj.tcs += billitem.quantity
+                billdetailsobj.total += billitem.totalprice
                 # updates quantity in stock db
                 stock.quantity -= billitem.quantity   
                 # saves bill item and stock
                 stock.save()
                 billitem.save()
+            billdetailsobj.save()                
             messages.success(request, "Sold items have been registered successfully")
             return redirect('sale-bill', billno=billobj.billno)
         form = SaleForm(request.GET or None)
@@ -306,16 +308,16 @@ class PurchaseBillView(View):
         if form.is_valid():
             billdetailsobj = PurchaseBillDetails.objects.get(billno=billno)
             
-            billdetailsobj.eway = request.POST.get("eway")    
-            billdetailsobj.veh = request.POST.get("veh")
-            billdetailsobj.destination = request.POST.get("destination")
-            billdetailsobj.po = request.POST.get("po")
-            billdetailsobj.cgst = request.POST.get("cgst")
-            billdetailsobj.sgst = request.POST.get("sgst")
-            billdetailsobj.igst = request.POST.get("igst")
-            billdetailsobj.cess = request.POST.get("cess")
-            billdetailsobj.tcs = request.POST.get("tcs")
-            billdetailsobj.total = request.POST.get("total")
+            # billdetailsobj.eway = request.POST.get("eway")    
+            # billdetailsobj.veh = request.POST.get("veh")
+            # billdetailsobj.destination = request.POST.get("destination")
+            # billdetailsobj.po = request.POST.get("po")
+            # billdetailsobj.cgst = request.POST.get("cgst")
+            # billdetailsobj.sgst = request.POST.get("sgst")
+            # billdetailsobj.igst = request.POST.get("igst")
+            # billdetailsobj.cess = request.POST.get("cess")
+            # billdetailsobj.tcs = request.POST.get("tcs")
+            # billdetailsobj.total = request.POST.get("total")
 
             billdetailsobj.save()
             messages.success(request, "Bill details have been modified successfully")

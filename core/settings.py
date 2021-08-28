@@ -45,8 +45,13 @@ INSTALLED_APPS = [
     'homepage.apps.HomepageConfig',
     'inventory.apps.InventoryConfig',
     'transactions.apps.TransactionsConfig',
+    'dbbackup',  # django-dbbackup
 
 ]
+
+
+DBBACKUP_STORAGE = 'dbbackup.storage.filesystem_storage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '.'}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
